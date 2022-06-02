@@ -6,4 +6,3 @@ const numbersCollection = new NumbersCollection([-10, 20, 30, 0]);
 const sorter = new Sorter(numbersCollection);
 sorter.sort();
 console.log(sorter.collection.data);
-
