@@ -1,14 +1,13 @@
 import { NumbersCollection } from './NumbersCollection';
 
+interface Sortable {
+  length: number;
+  compare(leftIndex: number, rightIndex: number): boolean;
+  swap(leftIndex: number, rightIndex: number): void;
+}
+
 export class Sorter {
-  //   collection: number[] | string;
-
-  //   constructor(collection: number[] | string) {
-  //     this.collection = collection;
-  //   }
-
-  //Another way to defined parameter in constructor
-  constructor(public collection: NumbersCollection) {}
+  constructor(public collection: Sortable) {}
   sort(): void {
     const { length } = this.collection;
     for (let i = 0; i < length; i++) {

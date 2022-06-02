@@ -2,11 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Sorter = void 0;
 class Sorter {
-    //   collection: number[] | string;
-    //   constructor(collection: number[] | string) {
-    //     this.collection = collection;
-    //   }
-    //Another way to defined parameter in constructor
     constructor(collection) {
         this.collection = collection;
     }
