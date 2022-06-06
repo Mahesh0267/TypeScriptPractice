@@ -148,6 +148,18 @@ function () {
     this.events[eventname] = handler;
   };
 
+  User.prototype.trigger = function (eventName) {
+    var handler = this.events[eventName];
+
+    if (!handler || handler.length === 0) {
+      return;
+    }
+
+    handler.forEach(function (callback) {
+      callback();
+    });
+  };
+
   return User;
 }();
 
@@ -165,8 +177,16 @@ var user = new User_1.User({
   name: 'abc',
   age: 12
 });
-user.on('change', function () {});
-console.log(user);
+user.on('change', function () {
+  console.log('change#1');
+});
+user.on('change', function () {
+  console.log('change #2');
+});
+user.on('save', function () {
+  console.log('Save');
+});
+user.trigger('change');
 },{"./models/User":"src/models/User.ts"}],"../../../../.nvm/versions/node/v18.2.0/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
