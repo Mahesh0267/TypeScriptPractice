@@ -54,7 +54,7 @@ class Places {
     console.log('places');
   }
 }
-
+ 
 interface Printable {
   print(): void;
 }
