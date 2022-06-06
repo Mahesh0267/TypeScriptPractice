@@ -21,26 +21,48 @@ class ArraySomeThings<T> {
 
 const arr = new ArraySomeThings(['a', 'n', 'a']);
 
-
-function printNumber(arr:number[]):void{
-    for(let i=0;i<arr.length;i++){
-        console.log(arr[i]);
-    }
+function printNumber(arr: number[]): void {
+  for (let i = 0; i < arr.length; i++) {
+    console.log(arr[i]);
+  }
 }
 
-function printString(arr:string[]):void{
-    for(let i=0;i<arr.length;i++){
-        console.log(arr[i]);
-    }
+function printString(arr: string[]): void {
+  for (let i = 0; i < arr.length; i++) {
+    console.log(arr[i]);
+  }
 }
 
-function printSomething<T>(arr:T[]):void{
-    for(let i=0;i<arr.length;i++){
-        console.log(arr[i]);
-    }
+function printSomething<T>(arr: T[]): void {
+  for (let i = 0; i < arr.length; i++) {
+    console.log(arr[i]);
+  }
 }
 
-printSomething(['a','b','c']);
+printSomething(['a', 'b', 'c']);
 
+//constraits
 
+class Houses {
+  print() {
+    console.log('House');
+  }
+}
 
+class Places {
+  print() {
+    console.log('places');
+  }
+}
+
+interface Printable {
+  print(): void;
+}
+
+function printAnything<T extends Printable>(arr: T[]): void {
+  for (let i = 0; i < arr.length; i++) {
+    arr[i].print();
+  }
+}
+
+printAnything<Houses>([new Houses(), new Houses()]);
