@@ -18,3 +18,29 @@ class ArraySomeThings<T> {
     return this.collection[index];
   }
 }
+
+const arr = new ArraySomeThings(['a', 'n', 'a']);
+
+
+function printNumber(arr:number[]):void{
+    for(let i=0;i<arr.length;i++){
+        console.log(arr[i]);
+    }
+}
+
+function printString(arr:string[]):void{
+    for(let i=0;i<arr.length;i++){
+        console.log(arr[i]);
+    }
+}
+
+function printSomething<T>(arr:T[]):void{
+    for(let i=0;i<arr.length;i++){
+        console.log(arr[i]);
+    }
+}
+
+printSomething(['a','b','c']);
+
+
+
