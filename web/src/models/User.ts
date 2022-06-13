@@ -1,14 +1,13 @@
 import axios, { AxiosResponse } from 'axios';
+import { Eventing } from './Eventing';
 
 interface UserProps {
   name?: string; //null factor
   age?: number;
 }
 
-type callback = () => {};
-
 export class User {
-  events: { [Key: string]: callback[] } = {};
+  public events: Eventing = new Eventing();
   constructor(private data: UserProps) {}
 
   get(propName: string): number | string {
@@ -17,23 +16,6 @@ export class User {
 
   set(update: UserProps): void {
     Object.assign(this.data, update);
-  }
-
-  on(eventname: string, callback: callback) {
-    //   this.events[eventname] //callback or undefined
-    const handler = this.events[eventname] || [];
-    handler.push(callback);
-    this.events[eventname] = handler;
-  }
-
-  trigger(eventName: string): void {
-    const handler = this.events[eventName];
-    if (!handler || handler.length === 0) {
-      return;
-    }
-    handler.forEach((callback) => {
-      callback();
-    });
   }
 
   fetch(): void {
