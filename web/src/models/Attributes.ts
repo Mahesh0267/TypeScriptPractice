@@ -1,3 +1,5 @@
+import { UserProps } from './User';
+
 export class Attributes<T> {
   constructor(private data: T) {}
 
@@ -9,3 +11,13 @@ export class Attributes<T> {
     Object.assign(this.data, update);
   }
 }
+
+const attrd = new Attributes<UserProps>({ id: 6, name: 'jsgdjf', age: 222 });
+
+const id = attrd.get('id') as number;
+
+if (typeof id === 'number') {
+  id;
+}
+
+const name = attrd.get('name');
