@@ -4543,7 +4543,7 @@ module.exports.default = axios;
 
 },{"./utils":"node_modules/axios/lib/utils.js","./helpers/bind":"node_modules/axios/lib/helpers/bind.js","./core/Axios":"node_modules/axios/lib/core/Axios.js","./core/mergeConfig":"node_modules/axios/lib/core/mergeConfig.js","./defaults":"node_modules/axios/lib/defaults/index.js","./cancel/CanceledError":"node_modules/axios/lib/cancel/CanceledError.js","./cancel/CancelToken":"node_modules/axios/lib/cancel/CancelToken.js","./cancel/isCancel":"node_modules/axios/lib/cancel/isCancel.js","./env/data":"node_modules/axios/lib/env/data.js","./helpers/toFormData":"node_modules/axios/lib/helpers/toFormData.js","../lib/core/AxiosError":"node_modules/axios/lib/core/AxiosError.js","./helpers/spread":"node_modules/axios/lib/helpers/spread.js","./helpers/isAxiosError":"node_modules/axios/lib/helpers/isAxiosError.js"}],"node_modules/axios/index.js":[function(require,module,exports) {
 module.exports = require('./lib/axios');
-},{"./lib/axios":"node_modules/axios/lib/axios.js"}],"src/index.ts":[function(require,module,exports) {
+},{"./lib/axios":"node_modules/axios/lib/axios.js"}],"src/models/User.ts":[function(require,module,exports) {
 "use strict";
 
 var __importDefault = this && this.__importDefault || function (mod) {
@@ -4555,14 +4555,74 @@ var __importDefault = this && this.__importDefault || function (mod) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.User = void 0;
 
 var axios_1 = __importDefault(require("axios"));
 
-axios_1.default.post('http://localhost:3000/posts', {
-  name: 'myname',
-  age: 20
+var User =
+/** @class */
+function () {
+  function User(data) {
+    this.data = data;
+    this.events = {};
+  }
+
+  User.prototype.get = function (propName) {
+    return this.data[propName];
+  };
+
+  User.prototype.set = function (update) {
+    Object.assign(this.data, update);
+  };
+
+  User.prototype.on = function (eventname, callback) {
+    //   this.events[eventname] //callback or undefined
+    var handler = this.events[eventname] || [];
+    handler.push(callback);
+    this.events[eventname] = handler;
+  };
+
+  User.prototype.trigger = function (eventName) {
+    var handler = this.events[eventName];
+
+    if (!handler || handler.length === 0) {
+      return;
+    }
+
+    handler.forEach(function (callback) {
+      callback();
+    });
+  };
+
+  User.prototype.fetch = function () {
+    var _this = this;
+
+    axios_1.default.get("http://localhost:3000/posts/".concat(this.get('id'))).then(function (response) {
+      _this.set(response.data);
+    });
+  };
+
+  return User;
+}();
+
+exports.User = User;
+},{"axios":"node_modules/axios/index.js"}],"src/index.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
 });
-},{"axios":"node_modules/axios/index.js"}],"../../../../.nvm/versions/node/v18.2.0/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+
+var User_1 = require("./models/User");
+
+var user = new User_1.User({
+  id: 1
+});
+user.fetch();
+setTimeout(function () {
+  console.log(user);
+}, 4000);
+},{"./models/User":"src/models/User.ts"}],"../../../../.nvm/versions/node/v18.2.0/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
