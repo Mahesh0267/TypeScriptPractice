@@ -1,9 +1,19 @@
 {
   "posts": [
     {
-      "name": "myname",
-      "age": 20,
-      "id": 1
+      "id": 1,
+      "name": "new Name",
+      "age": 19
+    },
+    {
+      "name": "new brand name",
+      "age": 9999,
+      "id": 2
+    },
+    {
+      "name": "new brand name",
+      "age": 9999,
+      "id": 3
     }
   ],
   "comments": [],
