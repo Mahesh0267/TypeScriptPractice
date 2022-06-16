@@ -3,8 +3,8 @@ import { UserProps } from './User';
 export class Attributes<T> {
   constructor(private data: T) {}
 
-  get(propName: string): number | string {
-    return this.data[propName];
+  get<K extends keyof T>(key: K): T[K] {
+    return this.data[key];
   }
 
   set(update: T): void {
@@ -12,12 +12,22 @@ export class Attributes<T> {
   }
 }
 
-const attrd = new Attributes<UserProps>({ id: 6, name: 'jsgdjf', age: 222 });
+// const attrs = new Attributes<UserProps>({
+//   id: 5,
+//   age: 20,
+//   name: 'addsa',
+// });
 
-const id = attrd.get('id') as number;
+// const name = attrs.get('name');
+// const age = attrs.get('age');
+// const id = attrs.get('id');
 
-if (typeof id === 'number') {
-  id;
-}
+// const attrd = new Attributes<UserProps>({ id: 6, name: 'jsgdjf', age: 222 });
 
-const name = attrd.get('name');
+// const id = attrd.get('id') as number;
+
+// if (typeof id === 'number') {
+//   id;
+// }
+
+// const name = attrd.get('name');
