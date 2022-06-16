@@ -1,7 +1,7 @@
 type callback = () => {};
 export class Eventing {
   events: { [Key: string]: callback[] } = {};
-  on(eventname: string, callback: callback) {
+  on(eventname: string, callback: callback): void {
     //   this.events[eventname] //callback or undefined
     const handler = this.events[eventname] || [];
     handler.push(callback);
