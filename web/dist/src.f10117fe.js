@@ -117,7 +117,53 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"src/models/Eventing.ts":[function(require,module,exports) {
+})({"src/models/Attributes.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Attributes = void 0;
+
+var Attributes =
+/** @class */
+function () {
+  function Attributes(data) {
+    var _this = this;
+
+    this.data = data;
+
+    this.get = function (key) {
+      return _this.data[key];
+    };
+  }
+
+  Attributes.prototype.set = function (update) {
+    Object.assign(this.data, update);
+  };
+
+  Attributes.prototype.getAll = function () {
+    return this.data;
+  };
+
+  return Attributes;
+}();
+
+exports.Attributes = Attributes; // const attrs = new Attributes<UserProps>({
+//   id: 5,
+//   age: 20,
+//   name: 'addsa',
+// });
+// const name = attrs.get('name');
+// const age = attrs.get('age');
+// const id = attrs.get('id');
+// const attrd = new Attributes<UserProps>({ id: 6, name: 'jsgdjf', age: 222 });
+// const id = attrd.get('id') as number;
+// if (typeof id === 'number') {
+//   id;
+// }
+// const name = attrd.get('name');
+},{}],"src/models/Eventing.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -129,27 +175,29 @@ var Eventing =
 /** @class */
 function () {
   function Eventing() {
+    var _this = this;
+
     this.events = {};
+
+    this.on = function (eventname, callback) {
+      //   this.events[eventname] //callback or undefined
+      var handler = _this.events[eventname] || [];
+      handler.push(callback);
+      _this.events[eventname] = handler;
+    };
+
+    this.trigger = function (eventName) {
+      var handler = _this.events[eventName];
+
+      if (!handler || handler.length === 0) {
+        return;
+      }
+
+      handler.forEach(function (callback) {
+        callback();
+      });
+    };
   }
-
-  Eventing.prototype.on = function (eventname, callback) {
-    //   this.events[eventname] //callback or undefined
-    var handler = this.events[eventname] || [];
-    handler.push(callback);
-    this.events[eventname] = handler;
-  };
-
-  Eventing.prototype.trigger = function (eventName) {
-    var handler = this.events[eventName];
-
-    if (!handler || handler.length === 0) {
-      return;
-    }
-
-    handler.forEach(function (callback) {
-      callback();
-    });
-  };
 
   return Eventing;
 }();
@@ -4632,34 +4680,79 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.User = void 0;
 
+var Attributes_1 = require("./Attributes");
+
 var Eventing_1 = require("./Eventing");
 
 var Sync_1 = require("./Sync");
 
-var rootUrl = 'https://localhost:3000/users';
+var rootUrl = 'http://localhost:3000/posts/';
 
 var User =
 /** @class */
 function () {
-  function User(data) {
-    this.data = data;
+  function User(attr) {
     this.events = new Eventing_1.Eventing();
-    this.sync = new Sync_1.Sync();
+    this.sync = new Sync_1.Sync(rootUrl);
+    this.attributes = new Attributes_1.Attributes(attr);
   }
 
-  User.prototype.get = function (propName) {
-    return this.data[propName];
-  };
+  Object.defineProperty(User.prototype, "on", {
+    get: function get() {
+      return this.events.on;
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(User.prototype, "trigger", {
+    get: function get() {
+      return this.events.trigger;
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(User.prototype, "get", {
+    get: function get() {
+      return this.attributes.get;
+    },
+    enumerable: false,
+    configurable: true
+  });
 
   User.prototype.set = function (update) {
-    Object.assign(this.data, update);
+    this.attributes.set(update);
+    this.trigger('change');
+  };
+
+  User.prototype.fetch = function () {
+    var _this = this;
+
+    var id = this.get('id');
+
+    if (typeof id !== 'number') {
+      throw new Error('connent fetch without id');
+    }
+
+    this.sync.fetch(id).then(function (response) {
+      _this.set(response.data);
+    });
+  };
+
+  User.prototype.save = function () {
+    var _this = this;
+
+    this.sync.save(this.attributes.getAll()).then(function (response) {
+      _this.trigger('save');
+    }).catch(function () {
+      _this.trigger('error');
+    });
   };
 
   return User;
 }();
 
 exports.User = User;
-},{"./Eventing":"src/models/Eventing.ts","./Sync":"src/models/Sync.ts"}],"src/index.ts":[function(require,module,exports) {
+},{"./Attributes":"src/models/Attributes.ts","./Eventing":"src/models/Eventing.ts","./Sync":"src/models/Sync.ts"}],"src/index.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4669,13 +4762,34 @@ Object.defineProperty(exports, "__esModule", {
 var User_1 = require("./models/User");
 
 var user = new User_1.User({
-  name: 'new brand name',
-  age: 9999
-});
-user.events.on('change', function () {
-  console.log('change!');
-});
-user.events.trigger('change');
+  id: 1,
+  name: 'neweer name',
+  age: 23
+}); // console.log(user.get('name'));   //get error
+
+user.on('change', function () {
+  console.log(user);
+}); // user.fetch();
+
+user.save(); // user.trigger('change');
+// user.set({ name: 'New name' });
+//quic remider on accerors
+// class Person {
+//   constructor(public firstName: string, public lastName) {}
+//   get fullName(): string {
+//     return `${this.firstName} ${this.lastName}`;
+//   }
+// }
+// const person = new Person('firstname', 'lastname');
+// person.fullName; eamplebelow
+//Reminder on how to 'this' works in javascript
+// const Colors = {
+//   color: 'red',
+//   printColor() {
+//     console.log(this.color);
+//   },
+// };
+// Colors.printColor(); // peint color 'red' in console
 },{"./models/User":"src/models/User.ts"}],"../../../../.nvm/versions/node/v18.2.0/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -4704,7 +4818,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "36105" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "34329" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

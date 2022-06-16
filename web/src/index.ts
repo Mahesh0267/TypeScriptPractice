@@ -1,14 +1,19 @@
 import { User } from './models/User';
 
-const user = new User({ name: 'new brand name', age: 9999 });
+const user = new User({ id: 1, name: 'neweer name', age: 23 });
 
 // console.log(user.get('name'));   //get error
 
 user.on('change', () => {
-  console.log('user was changed');
+  console.log(user);
 });
 
-user.trigger('change');
+// user.fetch();
+user.save();
+
+// user.trigger('change');
+
+// user.set({ name: 'New name' });
 
 //quic remider on accerors
 
