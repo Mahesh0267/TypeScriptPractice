@@ -27,6 +27,10 @@ export class User extends Model<UserProps> {
       (json: UserProps) => User.buildBuild(json)
     );
   }
+  setRandomAge(): void {
+    const age = Math.round(Math.random() * 100);
+    this.set({ age });
+  }
 }
 
 // const user = User.buildBuild({})
