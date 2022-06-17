@@ -5003,6 +5003,7 @@ function (_super) {
   }
 
   UserForm.prototype.eventMap = function () {
+    // this.model.get('name');
     return {
       'click:.set-age': this.onSetAgeClick,
       'click:.change-name': this.onSetNameClick
