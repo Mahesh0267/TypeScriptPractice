@@ -3,7 +3,9 @@ import { UserForm } from './views/UserForm';
 
 const user = User.buildBuild({ name: 'Name', age: 20 });
 
-const userForm = new UserForm(document.getElementById('root'), user);
+const doc = document.getElementById('root');
+
+const userForm = new UserForm(doc, user);
 
 userForm.render();
 
