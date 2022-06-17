@@ -1,14 +1,27 @@
-import { User } from './models/User';
+import { Collection } from './models/Collection';
+import { User, UserProps } from './models/User';
 
-const user = User.buildBuild({ id: 1 });
+const collection = new Collection<User, UserProps>(
+  'http://localhost:3000/posts',
+  (json: UserProps) => User.buildBuild(json)
+);
 
-// console.log(user.get('name'));   //get error
-
-user.on('change', () => {
-  console.log(user);
+collection.on('change', () => {
+  console.log(collection);
 });
+collection.fetch();
 
-user.fetch();
+// import { User } from './models/User';
+
+// const user = User.buildBuild({ id: 1 });
+
+// // console.log(user.get('name'));   //get error
+
+// user.on('change', () => {
+//   console.log(user);
+// });
+
+// user.fetch();
 // user.save();
 
 // user.trigger('change');
