@@ -1,6 +1,6 @@
 import { User } from './models/User';
 
-const user = new User({ id: 1, name: 'neweer name', age: 23 });
+const user = User.buildBuild({ id: 1 });
 
 // console.log(user.get('name'));   //get error
 
@@ -8,8 +8,8 @@ user.on('change', () => {
   console.log(user);
 });
 
-// user.fetch();
-user.save();
+user.fetch();
+// user.save();
 
 // user.trigger('change');
 

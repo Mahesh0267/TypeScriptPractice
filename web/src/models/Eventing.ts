@@ -1,4 +1,4 @@
-type callback = () => {};
+type callback = () => void;
 export class Eventing {
   events: { [Key: string]: callback[] } = {};
   on = (eventname: string, callback: callback): void => {
