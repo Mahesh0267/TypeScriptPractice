@@ -4901,6 +4901,10 @@ function () {
     this.bindModel();
   }
 
+  View.prototype.eventMap = function () {
+    return {};
+  };
+
   View.prototype.bindModel = function () {
     var _this = this;
 
@@ -4985,6 +4989,10 @@ function (_super) {
   function UserForm() {
     var _this = _super !== null && _super.apply(this, arguments) || this;
 
+    _this.onSaveClick = function () {
+      _this.model.save();
+    };
+
     _this.onSetNameClick = function () {
       var input = _this.parent.querySelector('input');
 
@@ -5006,12 +5014,13 @@ function (_super) {
     // this.model.get('name');
     return {
       'click:.set-age': this.onSetAgeClick,
-      'click:.change-name': this.onSetNameClick
+      'click:.change-name': this.onSetNameClick,
+      'click:.save-model': this.onSaveClick
     };
   };
 
   UserForm.prototype.template = function () {
-    return "\n        <div>\n          <h1>User Form</h1>\n          <div>name:".concat(this.model.get('name'), "</div>\n          <div>age:").concat(this.model.get('age'), "</div>\n          <input />\n          <button class ='change-name'>Change Name</button>\n          <button class = 'set-age'>Set Random Age</button>\n        </div>\n      ");
+    return "\n        <div>\n          <input placeholder=\"".concat(this.model.get('name'), "\" />\n          <button class ='change-name'>Change Name</button>\n          <button class = 'set-age'>Set Random Age</button>\n          <button class = 'save-model'>Save</button>\n        </div>\n      ");
   };
 
   return UserForm;
