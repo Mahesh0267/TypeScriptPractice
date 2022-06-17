@@ -4543,7 +4543,96 @@ module.exports.default = axios;
 
 },{"./utils":"node_modules/axios/lib/utils.js","./helpers/bind":"node_modules/axios/lib/helpers/bind.js","./core/Axios":"node_modules/axios/lib/core/Axios.js","./core/mergeConfig":"node_modules/axios/lib/core/mergeConfig.js","./defaults":"node_modules/axios/lib/defaults/index.js","./cancel/CanceledError":"node_modules/axios/lib/cancel/CanceledError.js","./cancel/CancelToken":"node_modules/axios/lib/cancel/CancelToken.js","./cancel/isCancel":"node_modules/axios/lib/cancel/isCancel.js","./env/data":"node_modules/axios/lib/env/data.js","./helpers/toFormData":"node_modules/axios/lib/helpers/toFormData.js","../lib/core/AxiosError":"node_modules/axios/lib/core/AxiosError.js","./helpers/spread":"node_modules/axios/lib/helpers/spread.js","./helpers/isAxiosError":"node_modules/axios/lib/helpers/isAxiosError.js"}],"node_modules/axios/index.js":[function(require,module,exports) {
 module.exports = require('./lib/axios');
-},{"./lib/axios":"node_modules/axios/lib/axios.js"}],"src/models/Eventing.ts":[function(require,module,exports) {
+},{"./lib/axios":"node_modules/axios/lib/axios.js"}],"src/models/ApiSync.ts":[function(require,module,exports) {
+"use strict";
+
+var __importDefault = this && this.__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.ApiSync = void 0;
+
+var axios_1 = __importDefault(require("axios"));
+
+var ApiSync =
+/** @class */
+function () {
+  function ApiSync(rootUrl) {
+    this.rootUrl = rootUrl;
+  }
+
+  ApiSync.prototype.fetch = function (id) {
+    return axios_1.default.get("".concat(this.rootUrl).concat(id));
+  };
+
+  ApiSync.prototype.save = function (data) {
+    var id = data.id;
+
+    if (id) {
+      //put
+      return axios_1.default.put("".concat(this.rootUrl).concat(id), data);
+    } else {
+      //post
+      return axios_1.default.post("".concat(this.rootUrl), data);
+    }
+  };
+
+  return ApiSync;
+}();
+
+exports.ApiSync = ApiSync;
+},{"axios":"node_modules/axios/index.js"}],"src/models/Attributes.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Attributes = void 0;
+
+var Attributes =
+/** @class */
+function () {
+  function Attributes(data) {
+    var _this = this;
+
+    this.data = data;
+
+    this.get = function (key) {
+      return _this.data[key];
+    };
+  }
+
+  Attributes.prototype.set = function (update) {
+    Object.assign(this.data, update);
+  };
+
+  Attributes.prototype.getAll = function () {
+    return this.data;
+  };
+
+  return Attributes;
+}();
+
+exports.Attributes = Attributes; // const attrs = new Attributes<UserProps>({
+//   id: 5,
+//   age: 20,
+//   name: 'addsa',
+// });
+// const name = attrs.get('name');
+// const age = attrs.get('age');
+// const id = attrs.get('id');
+// const attrd = new Attributes<UserProps>({ id: 6, name: 'jsgdjf', age: 222 });
+// const id = attrd.get('id') as number;
+// if (typeof id === 'number') {
+//   id;
+// }
+// const name = attrd.get('name');
+},{}],"src/models/Eventing.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4642,96 +4731,7 @@ function () {
 }();
 
 exports.Collection = Collection;
-},{"axios":"node_modules/axios/index.js","./Eventing":"src/models/Eventing.ts"}],"src/models/ApiSync.ts":[function(require,module,exports) {
-"use strict";
-
-var __importDefault = this && this.__importDefault || function (mod) {
-  return mod && mod.__esModule ? mod : {
-    "default": mod
-  };
-};
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.ApiSync = void 0;
-
-var axios_1 = __importDefault(require("axios"));
-
-var ApiSync =
-/** @class */
-function () {
-  function ApiSync(rootUrl) {
-    this.rootUrl = rootUrl;
-  }
-
-  ApiSync.prototype.fetch = function (id) {
-    return axios_1.default.get("".concat(this.rootUrl).concat(id));
-  };
-
-  ApiSync.prototype.save = function (data) {
-    var id = data.id;
-
-    if (id) {
-      //put
-      return axios_1.default.put("".concat(this.rootUrl).concat(id), data);
-    } else {
-      //post
-      return axios_1.default.post("".concat(this.rootUrl), data);
-    }
-  };
-
-  return ApiSync;
-}();
-
-exports.ApiSync = ApiSync;
-},{"axios":"node_modules/axios/index.js"}],"src/models/Attributes.ts":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.Attributes = void 0;
-
-var Attributes =
-/** @class */
-function () {
-  function Attributes(data) {
-    var _this = this;
-
-    this.data = data;
-
-    this.get = function (key) {
-      return _this.data[key];
-    };
-  }
-
-  Attributes.prototype.set = function (update) {
-    Object.assign(this.data, update);
-  };
-
-  Attributes.prototype.getAll = function () {
-    return this.data;
-  };
-
-  return Attributes;
-}();
-
-exports.Attributes = Attributes; // const attrs = new Attributes<UserProps>({
-//   id: 5,
-//   age: 20,
-//   name: 'addsa',
-// });
-// const name = attrs.get('name');
-// const age = attrs.get('age');
-// const id = attrs.get('id');
-// const attrd = new Attributes<UserProps>({ id: 6, name: 'jsgdjf', age: 222 });
-// const id = attrd.get('id') as number;
-// if (typeof id === 'number') {
-//   id;
-// }
-// const name = attrd.get('name');
-},{}],"src/models/Model.ts":[function(require,module,exports) {
+},{"axios":"node_modules/axios/index.js","./Eventing":"src/models/Eventing.ts"}],"src/models/Model.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4843,6 +4843,8 @@ var ApiSync_1 = require("./ApiSync");
 
 var Attributes_1 = require("./Attributes");
 
+var Collection_1 = require("./Collection");
+
 var Eventing_1 = require("./Eventing");
 
 var Model_1 = require("./Model");
@@ -4862,6 +4864,12 @@ function (_super) {
     return new User(new Attributes_1.Attributes(attrs), new Eventing_1.Eventing(), new ApiSync_1.ApiSync(rootUrl));
   };
 
+  User.buildUserCollection = function () {
+    return new Collection_1.Collection('http://localhost:3000/posts/', function (json) {
+      return User.buildBuild(json);
+    });
+  };
+
   return User;
 }(Model_1.Model);
 
@@ -4869,20 +4877,16 @@ exports.User = User; // const user = User.buildBuild({})
 // user.get('id');
 // user.get('name');
 // user.get('age');
-},{"./ApiSync":"src/models/ApiSync.ts","./Attributes":"src/models/Attributes.ts","./Eventing":"src/models/Eventing.ts","./Model":"src/models/Model.ts"}],"src/index.ts":[function(require,module,exports) {
+},{"./ApiSync":"src/models/ApiSync.ts","./Attributes":"src/models/Attributes.ts","./Collection":"src/models/Collection.ts","./Eventing":"src/models/Eventing.ts","./Model":"src/models/Model.ts"}],"src/index.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var Collection_1 = require("./models/Collection");
-
 var User_1 = require("./models/User");
 
-var collection = new Collection_1.Collection('http://localhost:3000/posts', function (json) {
-  return User_1.User.buildBuild(json);
-});
+var collection = User_1.User.buildUserCollection();
 collection.on('change', function () {
   console.log(collection);
 });
@@ -4913,7 +4917,7 @@ collection.fetch(); // import { User } from './models/User';
 //   },
 // };
 // Colors.printColor(); // peint color 'red' in console
-},{"./models/Collection":"src/models/Collection.ts","./models/User":"src/models/User.ts"}],"../../../../.nvm/versions/node/v18.2.0/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./models/User":"src/models/User.ts"}],"../../../../.nvm/versions/node/v18.2.0/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
