@@ -6,8 +6,21 @@ interface AppProps{
     color?:string;
 }
 
-class App extends React.Component<AppProps> {
-    state = {counter:0};
+interface AppState{
+    counter:number;
+}
+
+// const App =(props: AppProps):JSX.Element =>{
+//     return <div>{props.color}</div>
+// }
+
+class App extends React.Component<AppProps,AppState> {
+    
+    constructor(props:AppProps){
+        super(props);
+
+        this.state ={counter:0};
+    }
 
     onIncrement = () : void =>{
         this.setState({counter:this.state.counter + 1})
